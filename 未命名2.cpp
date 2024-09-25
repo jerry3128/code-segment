@@ -51,11 +51,16 @@ signed main() {
 		L=read(),R=read(),W=read();
 		add(L,R,W,1);
 		for(int j=1;j<=2*n-1;j++) 
-			cout<<v[j]<<"*"<<lazy[j]<<" ",
+//			cout<<v[j]<<"*"<<lazy[j]<<" ",
 			ans[i]+=v[j]*lazy[j];
-		cout<<"\n";
+//		cout<<"\n";
 		cout<<ans[i]<<"\n";
 //		if(i==8)exit(0);
+//		if(i==44){
+//			for(int j=1;j<=2*n-1;j++)
+//				cout<<v[j]<<"*"<<lazy[j]<<"\n";
+//			cout<<"\n";
+//		}
 	}
 //	for(int i=1;i<=q;i++) {
 //		int ql=read(),qr=read();

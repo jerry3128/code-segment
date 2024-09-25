@@ -67,7 +67,6 @@ namespace T{
 		v[rt].val=v[v[rt].ch[2]].preval;
 		v[rt].laz=v[v[rt].ch[2]].prelaz;
 		v[rt].ans=v[v[rt].ch[2]].ans;
-		v[rt].tans=v[v[rt].ch[2]].tans;
 		v[rt].sval[0]=v[v[rt].ch[2]].sval[0];
 		v[rt].sval[1]=v[v[rt].ch[2]].sval[1];
 		
@@ -94,14 +93,29 @@ namespace T{
 //		if(rt==8)
 //			cerr<<"push_pretagtag:"<<rt<<" "<<val[0]<<"<>"<<val[1]<<" "<<v[rt].pretagtag[0]<<"<>"<<v[rt].pretagtag[1]<<" "<<v[rt].tans<<" == "<<v[v[rt].ch[0]].tans+v[v[rt].ch[1]].tans+v[v[rt].ch[2]].ans+v[v[rt].ch[3]].ans+(v[v[rt].ch[0]].slaz+v[rt].laz)*(v[v[rt].ch[2]].val+v[v[rt].ch[3]].val+v[v[rt].ch[1]].sval[0]+v[v[rt].ch[1]].sval[1])<<"\n";
 //		cerr<<"push_pretagtag:"<<rt<<" "<<v[rt].tans<<" + "<<v[rt].sval[0]<<"*"<<val[0]<<"+"<<v[rt].sval[1]<<"*"<<val[1]<<" "<<val[0]<<" "<<val[1]<<"\n";
-		if(rt==81){
-			cerr<<v[rt].tans+v[rt].sval[0]*val[0]+v[rt].sval[1]*val[1]<<"\n";
-			
-		}
 		v[rt].pretagtag[0]+=val[0],v[rt].pretagtag[1]+=val[1];
 		v[rt].ans+=v[rt].sval[0]*val[0]+v[rt].sval[1]*val[1];
 		v[rt].tans+=v[rt].sval[0]*val[0]+v[rt].sval[1]*val[1];
 		
+		if(rt==81){
+			cerr<<v[rt].tans<<" "<<v[rt].sval[0]<<" "<<v[rt].sval[1]<<"\n";
+//			
+//			if(v[rt].pretagtag[0]||v[rt].pretagtag[1]){
+//				push_pretag(v[rt].ch[2],v[rt].pretagtag[0]);
+//				push_pretag(v[rt].ch[3],v[rt].pretagtag[1]);
+//				push_pretagtag(v[rt].ch[0],v[rt].pretagtag);
+//				push_pretagtag(v[rt].ch[1],v[rt].pretagtag);
+//				v[rt].pretagtag[0]=0,v[rt].pretagtag[1]=0;
+//			}
+//			
+			cerr<<"rtdlt:"<<v[rt].sval[0]*val[0]+v[rt].sval[1]*val[1]<<"\n";
+			cerr<<"sondlt:"<<v[v[rt].ch[2]].val*val[0]
+							+v[v[rt].ch[3]].val*val[1]
+							+v[v[rt].ch[0]].sval[0]*val[0]+v[v[rt].ch[0]].sval[1]*val[1]
+							+v[v[rt].ch[1]].sval[0]*val[0]+v[v[rt].ch[1]].sval[1]*val[1]<<"\n";
+			cerr<<v[rt].tans<<" "<<v[v[rt].ch[0]].tans+v[v[rt].ch[1]].tans+v[v[rt].ch[2]].ans+v[v[rt].ch[3]].ans+
+			(v[v[rt].ch[0]].slaz+v[rt].laz)*(v[v[rt].ch[2]].val+v[v[rt].ch[3]].val+v[v[rt].ch[1]].sval[0]+v[v[rt].ch[1]].sval[1])<<"\n";
+		}
 //		if(rt==8){
 //		cerr<<"after:"<<rt<<" "<<v[rt].tans<<" "<<
 //			v[v[rt].ch[0]].tans+v[v[rt].ch[0]].sval[0]*val[0]+v[v[rt].ch[0]].sval[1]*val[1]+
@@ -139,7 +153,14 @@ namespace T{
 //		cerr<<v[rt].tans<<" "<<v[v[rt].ch[0]].tans<<" + "<<v[v[rt].ch[1]].tans<<" + "<<v[v[rt].ch[2]].ans<<" + "<<v[v[rt].ch[3]].ans<<" + "<<0<<"\n";
 	}
 	void push_down_compress(int rt){
-//		if(rt==81)cout<<rt<<"::"<<v[rt].tans<<" "<<v[v[rt].ch[0]].tans+v[v[rt].ch[1]].tans+v[v[rt].ch[2]].ans+v[v[rt].ch[3]].ans+(v[v[rt].ch[0]].slaz+v[rt].laz)*(v[v[rt].ch[2]].val+v[v[rt].ch[3]].val+v[v[rt].ch[1]].sval[0]+v[v[rt].ch[1]].sval[1])<<"\n";
+		if(v[rt].pretagtag[0]||v[rt].pretagtag[1]){
+			push_pretag(v[rt].ch[2],v[rt].pretagtag[0]);
+			push_pretag(v[rt].ch[3],v[rt].pretagtag[1]);
+			push_pretagtag(v[rt].ch[0],v[rt].pretagtag);
+			push_pretagtag(v[rt].ch[1],v[rt].pretagtag);
+			v[rt].pretagtag[0]=0,v[rt].pretagtag[1]=0;
+		}
+		if(rt==81)cout<<rt<<"::"<<v[rt].tans<<" "<<v[v[rt].ch[0]].tans+v[v[rt].ch[1]].tans+v[v[rt].ch[2]].ans+v[v[rt].ch[3]].ans+(v[v[rt].ch[0]].slaz+v[rt].laz)*(v[v[rt].ch[2]].val+v[v[rt].ch[3]].val+v[v[rt].ch[1]].sval[0]+v[v[rt].ch[1]].sval[1])<<"\n";
 		
 		if(v[rt].ctag)push_ctag(v[rt].ch[0]),push_ctag(v[rt].ch[1]),v[rt].ctag=0;
 		
@@ -154,7 +175,7 @@ namespace T{
 			v[rt].pretagtag[0]=0,v[rt].pretagtag[1]=0;
 		}
 //		cerr<<"rt:"<<rt<<" "<<v[rt].tans<<" "<<v[v[rt].ch[0]].tans+v[v[rt].ch[1]].tans<<" + "<<v[v[rt].ch[2]].ans+v[v[rt].ch[3]].ans<<" + "<<(v[v[rt].ch[0]].slaz+v[rt].laz)*(v[v[rt].ch[2]].val+v[v[rt].ch[3]].val+v[v[rt].ch[1]].sval[0]+v[v[rt].ch[1]].sval[1])<<"\n";
-//		if(rt==81)cout<<rt<<"::"<<v[rt].tans<<" "<<v[v[rt].ch[0]].tans+v[v[rt].ch[1]].tans+v[v[rt].ch[2]].ans+v[v[rt].ch[3]].ans+(v[v[rt].ch[0]].slaz+v[rt].laz)*(v[v[rt].ch[2]].val+v[v[rt].ch[3]].val+v[v[rt].ch[1]].sval[0]+v[v[rt].ch[1]].sval[1])<<"\n";
+		if(rt==81)cout<<rt<<"::"<<v[rt].tans<<" leftson:"<<v[v[rt].ch[0]].tans<<" + rightson:"<<v[v[rt].ch[1]].tans<<" + 2son:"<<v[v[rt].ch[2]].ans<<" + 3son:"<<v[v[rt].ch[3]].ans<<" + "<<(v[v[rt].ch[0]].slaz+v[rt].laz)*(v[v[rt].ch[2]].val+v[v[rt].ch[3]].val+v[v[rt].ch[1]].sval[0]+v[v[rt].ch[1]].sval[1])<<"\n";
 		assert(v[rt].tans == v[v[rt].ch[0]].tans+v[v[rt].ch[1]].tans+v[v[rt].ch[2]].ans+v[v[rt].ch[3]].ans+(v[v[rt].ch[0]].slaz+v[rt].laz)*(v[v[rt].ch[2]].val+v[v[rt].ch[3]].val+v[v[rt].ch[1]].sval[0]+v[v[rt].ch[1]].sval[1]));
 	}
 	void push_down_rake(int rt){
@@ -182,8 +203,11 @@ namespace T{
 		
 //		out(rt),out(v[rt].ch[0]),out(v[rt].ch[1]);
 		
-		if(rt<=N) assert(v[rt].tans == v[v[rt].ch[0]].tans+v[v[rt].ch[1]].tans+v[v[rt].ch[2]].ans+v[v[rt].ch[3]].ans+(v[v[rt].ch[0]].slaz+v[rt].laz)*(v[v[rt].ch[2]].val+v[v[rt].ch[3]].val+v[v[rt].ch[1]].sval[0]+v[v[rt].ch[1]].sval[1]));
-		if(rt>N)  assert(v[rt].tans == v[v[rt].ch[2]].tans);
+		if(rt<=N){
+			if(v[rt].tans != v[v[rt].ch[0]].tans+v[v[rt].ch[1]].tans+v[v[rt].ch[2]].ans+v[v[rt].ch[3]].ans+(v[v[rt].ch[0]].slaz+v[rt].laz)*(v[v[rt].ch[2]].val+v[v[rt].ch[3]].val+v[v[rt].ch[1]].sval[0]+v[v[rt].ch[1]].sval[1])) 
+				cerr<<v[rt].tans<<" "<<v[v[rt].ch[0]].tans<<" + "<<v[v[rt].ch[1]].tans<<" + "<<v[v[rt].ch[2]].ans<<" + "<<v[v[rt].ch[3]].ans<<" + "<<(v[v[rt].ch[0]].slaz+v[rt].laz)*(v[v[rt].ch[2]].val+v[v[rt].ch[3]].val+v[v[rt].ch[1]].sval[0]+v[v[rt].ch[1]].sval[1])<<"\n";
+			assert(v[rt].tans == v[v[rt].ch[0]].tans+v[v[rt].ch[1]].tans+v[v[rt].ch[2]].ans+v[v[rt].ch[3]].ans+(v[v[rt].ch[0]].slaz+v[rt].laz)*(v[v[rt].ch[2]].val+v[v[rt].ch[3]].val+v[v[rt].ch[1]].sval[0]+v[v[rt].ch[1]].sval[1]));
+		}
 	}
 	int son(int p,int x){
 		if(v[p].ch[0]==x)return 0;
