@@ -56,7 +56,7 @@ signed main() {
 //		cout<<"\n";
 		cout<<ans[i]<<"\n";
 //		if(i==8)exit(0);
-//		if(i==44){
+//		if(i==4){
 //			for(int j=1;j<=2*n-1;j++)
 //				cout<<v[j]<<"*"<<lazy[j]<<"\n";
 //			cout<<"\n";

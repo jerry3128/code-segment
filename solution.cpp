@@ -42,7 +42,7 @@ namespace T{
 		long long val,laz,preval,prelaz,slaz;//value and lazy, top's lazy
 		long long sval[2];//sum of left/right sons' value on current substructure, sum of lazy on current substructure.
 		long long pretag,pretagtag[2],ctag;//plus tag to top, plus tag to pretag on left/right son.
-		unsigned ans,tans;
+		long long ans,tans;
 	}v[400005];
 	bool isroot(int x){return v[v[x].fa].ch[0]!=x&&v[v[x].fa].ch[1]!=x;}
 	void add_son(int x,int t,int y) {v[x].ch[t]=y,v[y].fa=x;}
@@ -90,10 +90,11 @@ namespace T{
 	}
 	void push_ctag(int rt){
 		if(!rt)return;
-		long long tmp[2]={(v[rt].ctag?0:(v[rt].laz+(v[rt].ch[0]?v[v[rt].ch[0]].slaz+v[rt].pretag:0))), (v[rt].ctag?0:(v[rt].laz+(v[rt].ch[0]?v[v[rt].ch[0]].slaz+v[rt].pretag:0)))};
+		long long tal = (v[rt].laz+(v[rt].ch[0]?(v[rt].ctag?0:v[v[rt].ch[0]].slaz)+v[rt].pretag:0));
+		long long tmp[2]={tal, tal};
 		long long tnp[2]={v[rt].pretag, v[rt].pretag};
-		push_pretag(v[rt].ch[2],(v[rt].ctag?0:(v[rt].laz+(v[rt].ch[0]?v[v[rt].ch[0]].slaz+v[rt].pretag:0))));
-		push_pretag(v[rt].ch[3],(v[rt].ctag?0:(v[rt].laz+(v[rt].ch[0]?v[v[rt].ch[0]].slaz+v[rt].pretag:0))));
+		push_pretag(v[rt].ch[2],tal);
+		push_pretag(v[rt].ch[3],tal);
 		push_pretagtag(v[rt].ch[0],tnp);
 		push_pretagtag(v[rt].ch[1],tmp);
 		v[rt].ctag=1,v[rt].slaz=0,v[rt].laz=0,v[rt].prelaz=0,v[rt].pretag=0;
@@ -218,6 +219,20 @@ namespace T{
 		cout<<"\n";
 		return res;
 	}
+	void ck1(int rt){
+		if(!rt)return;
+		push_down(rt);
+		if(rt>N)return ck1(v[rt].ch[2]);
+		
+		cerr<<"rt:"<<rt<<" "<<v[rt].tans<<" "<<v[rt].ans<<"\n"; 
+		ck1(v[rt].ch[0]);
+		ck1(v[rt].ch[1]);
+		ck1(v[rt].ch[2]);
+		ck1(v[rt].ch[3]);
+		push_up(rt);
+		cerr<<"rt:"<<rt<<" "<<v[rt].tans<<" "<<v[rt].ans<<"\n";
+//		if(rt==1)cerr<<out1()<<"\n";
+	}
 }
 int l[200005],r[200005],p[200005];
 map<int,int> mp[200005];
@@ -248,8 +263,6 @@ int main() {
 			if(T::v[lnode].c==0)T::access(lnode),T::splay(lnode),T::v[lnode].laz+=tag,T::push_up(lnode);
 			if(T::v[rnode].c==1)T::access(rnode),T::splay(rnode),T::v[rnode].laz+=tag,T::push_up(rnode);
 			lnode=p[lnode], rnode=p[rnode];
-
-//			if(i==44)T::access(98),T::splay(98),cerr<<T::v[T::v[98].ch[0]].slaz<<"\n";
 						
 			T::access(lnode),T::splay(lnode),T::push_ctag(lnode),T::push_pretagtag(lnode,ltag),T::access(lca),T::splay(lca),T::push_pretagtag(lca,iltag);
 			T::access(rnode),T::splay(rnode),T::push_ctag(rnode),T::push_pretagtag(rnode,rtag),T::access(lca),T::splay(lca),T::push_pretagtag(lca,irtag);
@@ -259,6 +272,7 @@ int main() {
 //		if(i==44)cout<<T::out()<<"\n",exit(233);
 		T::splay(1),wrt(T::v[1].ans),pc('\n');
 		
+//		if(i==4)T::ck1(1);
 	}
 	fwrite(wb,1,p2,stdout);
 	return Loli Kon;
